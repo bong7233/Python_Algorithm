@@ -1,32 +1,28 @@
 # 가장 긴 팰린드롬 문자열 찾기
+# 팰린드롬이란, 좌우가 대칭되는 문자
+# 이번 문제는 입력받은 문자열 내에서 가장 긴 펠린드롬 문자를 찾는것
+
 def longPalindrome(s: str) -> str:
-
-    # 투포인터 구현함수
-    def expand(left: int, right: int) -> str:
-
-        # 두개의 포인터가 범위내에있고, 양끝이 같은문자를 나타내는지(대칭인지)확인
+    # 투포인터 구현함수 구현
+    def twoPointer(left: int, right: int) -> str:
         while left >= 0 and right < len(s) and s[left] == s[right]:
-
             # 대칭이 계속 유지된다면, 양끝의 위치를 한칸씩 넓힘
             left -= 1
             right += 1
-
-        # 대칭되는 양 끝단의 위치를 찾아서 슬라이싱후 리턴
-        return s[left + 1:right]
+        return s[(left + 1): right]
 
 
-    # 만약 문자열이 한글자이거나 이미 거꾸로해도 같은상황이라면 바로 문자열 리턴
+    # 만약 문자열이 한 글자 or 이미 팰린드롬이라면 그대로 리턴
     if len(s) < 2 or s == s[::-1]:
         return s
 
     result = ''
     for i in range(len(s) - 1):
         result = max(result,
-                     expand(i, i + 1), # 두칸짜리 투포인터(짝수 반복구간 찾기)
-                     expand(i, i + 2), # 세칸짜리 투포인터(홀수 반복구간 찾기)
-                     key=len)          # 길이를 기준
+                     twoPointer(i, i + 1),  # 두칸짜리 투포인터
+                     twoPointer(i, i + 2),  # 세칸짜리 투포인터
+                     key=len)
     return result
 
-## 테스트
-print(longPalindrome('abcaabbaasda')) # aabbaa
-print(longPalindrome('awwbwwc'))      # wwbww
+# 테스트
+print(longPalindrome('awwbwwc'))
