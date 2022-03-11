@@ -5,7 +5,6 @@
 def arrayPairSum(nums:[int]) -> int:
     return sum(sorted(nums)[::2])
 
-
 # 테스트
 nums = [1,4,3,2,5,9]
 print(arrayPairSum(nums)) # 9
