@@ -25,4 +25,4 @@ def longPalindrome(s: str) -> str:
     return result
 
 # 테스트
-print(longPalindrome('awwbwwc'))
+print(longPalindrome('awwbwwc'))  # wwbww

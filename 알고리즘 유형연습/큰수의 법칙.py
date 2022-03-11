@@ -21,4 +21,4 @@ def bigNum(data,n,m,k):
 
 data = [1,4,9,11,20]
 
-bigNum(data,5,10,2)
+bigNum(data,5,10,2)  # 173
