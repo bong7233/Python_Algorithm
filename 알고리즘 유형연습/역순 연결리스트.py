@@ -27,6 +27,11 @@ def reverseList(head: [ListNode]) -> [ListNode]:
         curr.next = prev  # 그다음 curr포인터가 있는(head)의 화살표방향을 반대로바꿈
         prev = curr       # prev 포인터를 curr 위치로 이동시킨다
         curr = next       # curr 포인터를 next 위치로 이동시킨다
+    '''
+    위의 while문은 먼저 이해하기위해 다중할당을 사용하지않았지만
+    다중할당을 사용할경우 runtime이 절반으로 줄어든다.
+    다중할당을 사용하는 습관을 기르기위해 주석으로 기록해둬야겠다
+    '''
 
     # 반복이 끝나면 prev포인터는 리스트의 마지막노드를 가리키고있음
     # curr,next 포인터는 리스트밖으로 나가게된다(None)
