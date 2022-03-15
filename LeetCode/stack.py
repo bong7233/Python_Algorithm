@@ -1,5 +1,3 @@
-# 스택과 스택에 들어갈 노드 구현하기
-
 class Node:
     def __init__(self, item, next):
         self.item = item
