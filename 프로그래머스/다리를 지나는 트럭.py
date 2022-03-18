@@ -1,4 +1,3 @@
-
 def solution(bridge_length, weight, truck_weights):
     count = 0   # 경과 시간
     weight_sum = 0     # 다리위의 트럭들의 무게의 함
