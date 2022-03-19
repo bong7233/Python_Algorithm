@@ -1,7 +1,7 @@
 def solution(bridge_length, weight, truck_weights):
-    count = 0   # 경과 시간
+    count = 0          # 경과 시간
     weight_sum = 0     # 다리위의 트럭들의 무게의 함
-    bridge = [] # 다리위에 있는 트럭들
+    bridge = []        # 다리위에 있는 트럭들
 
     while truck_weights:
         count += 1
