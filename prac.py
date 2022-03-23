@@ -1,144 +1,119 @@
 class Node:
 
-    def __init__(self, key, data):
-        self.key = key
-        self.data = data
-        self.left = None
-        self.right = None
+    def __init__(self, item):
+        self.data = item
+        self.prev = None
+        self.next = None
 
 
-    def insert(self, key, data):
-        if key < self.key:
-            if self.left:
-                self.left.insert(key, data)
-            else:
-                self.left = Node(key, data)
-        elif key > self.key:
-            if self.right:
-                self.right.insert(key, data)
-            else:
-                self.right = Node(key, data)
-        else:
-            raise KeyError('Key %s already exists.' % key)
-
-
-    def lookup(self, key, parent=None):
-        if key < self.key:
-            if self.left:
-                return self.left.lookup(key, self)
-            else:
-                return None, None
-        elif key > self.key:
-            if self.right:
-                return self.right.lookup(key, self)
-            else:
-                return None, None
-        else:
-            return self, parent
-
-
-    def inorder(self):
-        traversal = []
-        if self.left:
-            traversal += self.left.inorder()
-        traversal.append(self)
-        if self.right:
-            traversal += self.right.inorder()
-        return traversal
-
-
-    def countChildren(self):
-        count = 0
-        if self.left:
-            count += 1
-        if self.right:
-            count += 1
-        return count
-
-
-class BinSearchTree:
+class DoublyLinkedList:
 
     def __init__(self):
-        self.root = None
+        self.nodeCount = 0
+        self.head = Node(None)
+        self.tail = Node(None)
+        self.head.prev = None
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        self.tail.next = None
 
+    def getLength(self):
+        return self.nodeCount
 
-    def insert(self, key, data):
-        if self.root:
-            self.root.insert(key, data)
+    def traverse(self):
+        result = []
+        curr = self.head
+        while curr.next.next:
+            curr = curr.next
+            result.append(curr.data)
+        return result
+
+    def reverse(self):
+        result = []
+        curr = self.tail
+        while curr.prev.prev:
+            curr = curr.prev
+            result.append(curr.data)
+        return result
+
+    def getAt(self, pos):
+        if pos < 0 or pos > self.nodeCount:
+            return None
+
+        if pos > self.nodeCount // 2:
+            i = 0
+            curr = self.tail
+            while i < self.nodeCount - pos + 1:
+                curr = curr.prev
+                i += 1
         else:
-            self.root = Node(key, data)
+            i = 0
+            curr = self.head
+            while i < pos:
+                curr = curr.next
+                i += 1
 
+        return curr
 
-    def lookup(self, key):
-        if self.root:
-            return self.root.lookup(key)
-        else:
-            return None, None
+    def insertAfter(self, prev, newNode):
+        next = prev.next
+        newNode.prev = prev
+        newNode.next = next
+        prev.next = newNode
+        next.prev = newNode
+        self.nodeCount += 1
+        return True
 
-
-    def remove(self, key):
-        node, parent = self.lookup(key)
-        if node:
-            nChildren = node.countChildren()
-            # The simplest case of no children
-            if nChildren == 0:
-                # 만약 parent 가 있으면
-                # node 가 왼쪽 자식인지 오른쪽 자식인지 판단하여
-                # parent.left 또는 parent.right 를 None 으로 하여
-                # leaf node 였던 자식을 트리에서 끊어내어 없앱니다.
-                if parent:
-                    pass
-                # 만약 parent 가 없으면 (node 는 root 인 경우)
-                # self.root 를 None 으로 하여 빈 트리로 만듭니다.
-                else:
-                    pass
-            # When the node has only one child
-            elif nChildren == 1:
-                # 하나 있는 자식이 왼쪽인지 오른쪽인지를 판단하여
-                # 그 자식을 어떤 변수가 가리키도록 합니다.
-                if node.left:
-                    pass
-                else:
-                    pass
-                # 만약 parent 가 있으면
-                # node 가 왼쪽 자식인지 오른쪽 자식인지 판단하여
-                # 위에서 가리킨 자식을 대신 node 의 자리에 넣습니다.
-                if parent:
-                    pass
-                # 만약 parent 가 없으면 (node 는 root 인 경우)
-                # self.root 에 위에서 가리킨 자식을 대신 넣습니다.
-                else:
-                    pass
-            # When the node has both left and right children
-            else:
-                parent = node
-                successor = node.right
-                # parent 는 node 를 가리키고 있고,
-                # successor 는 node 의 오른쪽 자식을 가리키고 있으므로
-                # successor 로부터 왼쪽 자식의 링크를 반복하여 따라감으로써
-                # 순환문이 종료할 때 successor 는 바로 다음 키를 가진 노드를,
-                # 그리고 parent 는 그 노드의 부모 노드를 가리키도록 찾아냅니다.
-                while successor.left:
-                    pass
-                # 삭제하려는 노드인 node 에 successor 의 key 와 data 를 대입합니다.
-                node.key = successor.key
-                node.data = successor.data
-                # 이제, successor 가 parent 의 왼쪽 자식인지 오른쪽 자식인지를 판단하여
-                # 그에 따라 parent.left 또는 parent.right 를
-                # successor 가 가지고 있던 (없을 수도 있지만) 자식을 가리키도록 합니다.
-                pass
-
-            return True
-
-        else:
+    def insertAt(self, pos, newNode):
+        if pos < 1 or pos > self.nodeCount + 1:
             return False
 
+        prev = self.getAt(pos - 1)
+        return self.insertAfter(prev, newNode)
 
-    def inorder(self):
-        if self.root:
-            return self.root.inorder()
-        else:
-            return []
+    def popAfter(self, prev):
+        curr = prev.next
+        next = curr.next
+        prev.next = next
+        next.prev = prev
+        self.nodeCount -= 1
+        return curr.data
+
+    def popAt(self, pos):
+        if pos < 1 or pos > self.nodeCount:
+            raise IndexError('Index out of range')
+
+        prev = self.getAt(pos - 1)
+        return self.popAfter(prev)
+
+    def concat(self, L):
+        self.tail.prev.next = L.head.next
+        L.head.next.prev = self.tail.prev
+        self.tail = L.tail
+
+        self.nodeCount += L.nodeCount
+
+
+class LinkedListQueue:
+
+    def __init__(self):
+        self.data = DoublyLinkedList()
+
+    def size(self):
+        return self.data.getLength()
+
+    def isEmpty(self):
+        return self.data.getLength() == 0
+
+    def enqueue(self, item):
+        node = Node(item)
+        self.data.insertAfter(self, self.data.tail, node)
+
+    def dequeue(self):
+        return self.data.popAt(self, self.data.head)
+
+    def peek(self):
+        return self.data.getAt(self, self.data.head)
 
 
 def solution(x):
